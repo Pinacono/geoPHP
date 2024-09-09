@@ -1,10 +1,15 @@
 <?php
+
+namespace Pinacono\GeoPHP\Adapters;
+
+use Pinacono\GeoPHP\Adapters\WKT;
+use Pinacono\GeoPHP\Geometries\Geometry;
+
 /**
  * EWKT (Extended Well Known Text) Adapter
  */
-class EWKT extends WKT
-{
-  
+class EWKT extends WKT {
+
   /**
    * Serialize geometries into an EWKT string.
    *
@@ -12,7 +17,7 @@ class EWKT extends WKT
    *
    * @return string The Extended-WKT string representation of the input geometries
    */
-  public function write(Geometry $geometry) {
+  public function write(Geometry $geometry, bool $unused = false) {
     $srid = $geometry->SRID();
     $wkt = '';
     if ($srid) {

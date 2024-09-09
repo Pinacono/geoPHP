@@ -1,10 +1,13 @@
 <?php
+
+namespace Pinacono\GeoPHP\Geometries;
+
 /**
  * LineString. A collection of Points representing a line.
  * A line can have more than one segment.
  */
-class LineString extends Collection
-{
+class LineString extends Collection {
+
   protected $geom_type = 'LineString';
 
   /**
@@ -15,7 +18,7 @@ class LineString extends Collection
    */
   public function __construct($points = array()) {
     if (count($points) == 1) {
-      throw new Exception("Cannot construct a LineString with a single point");
+      throw new \Exception("Cannot construct a LineString with a single point");
     }
 
     // Call the Collection constructor to build the LineString

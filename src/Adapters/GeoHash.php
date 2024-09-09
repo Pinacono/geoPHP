@@ -1,4 +1,11 @@
 <?php
+
+namespace Pinacono\GeoPHP\Adapters;
+
+use Pinacono\GeoPHP\Geometries\Geometry;
+use Pinacono\GeoPHP\Geometries\LineString;
+use Pinacono\GeoPHP\Geometries\Point;
+use Pinacono\GeoPHP\Geometries\Polygon;
 /**
  * PHP Geometry GeoHash encoder/decoder.
  *
@@ -95,7 +102,7 @@ class GeoHash extends GeoAdapter{
    * @param Point $geometry
    * @see GeoAdapter::write()
    */
-  public function write(Geometry $geometry, $precision = NULL){
+  public function write(Geometry $geometry, bool $flag = false, $precision = NULL){
     if ($geometry->isEmpty()) return '';
 
     if($geometry->geometryType() === 'Point'){

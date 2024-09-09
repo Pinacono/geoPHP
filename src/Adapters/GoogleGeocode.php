@@ -1,4 +1,15 @@
 <?php
+
+namespace Pinacono\GeoPHP\Adapters;
+
+use Pinacono\GeoPHP\Geometries\Geometry;
+use Pinacono\GeoPHP\Geometries\GeometryCollection;
+use Pinacono\GeoPHP\Geometries\LineString;
+use Pinacono\GeoPHP\Geometries\MultiPoint;
+use Pinacono\GeoPHP\Geometries\MultiPolygon;
+use Pinacono\GeoPHP\Geometries\Point;
+use Pinacono\GeoPHP\Geometries\Polygon;
+
 /*
  * (c) Camptocamp <info@camptocamp.com>
  * (c) Patrick Hayes
@@ -15,8 +26,9 @@
  * @package    geoPHP
  * @author     Patrick Hayes <patrick.d.hayes@gmail.com>
  */
-class GoogleGeocode extends GeoAdapter
-{
+class GoogleGeocode extends GeoAdapter {
+
+  private $result = null;
 
   /**
    * Read an address string or array geometry objects
@@ -29,10 +41,10 @@ class GoogleGeocode extends GeoAdapter
    * @param return_multiple - Return all results in a multipoint or multipolygon
    * @return Geometry|GeometryCollection
    */
-  public function read($address, $return_type = 'point', $bounds = FALSE, $return_multiple = FALSE) {
+  public function read($address, $return_type = 'point', object|bool $bounds = FALSE, $return_multiple = FALSE) {
     if (is_array($address)) $address = join(',', $address);
 
-    if (gettype($bounds) == 'object') {
+    if ( gettype($bounds) == 'object') {
       $bounds = $bounds->getBBox();
     }
     if (gettype($bounds) == 'array') {
@@ -75,8 +87,8 @@ class GoogleGeocode extends GeoAdapter
       }
     }
     else {
-      if ($this->result->status) throw new Exception('Error in Google Geocoder: '.$this->result->status);
-      else throw new Exception('Unknown error in Google Geocoder');
+      if ( $this->result->status ) throw new \Exception('Error in Google Geocoder: '.$this->result->status);
+      else throw new \Exception('Unknown error in Google Geocoder');
       return FALSE;
     }
   }
@@ -116,8 +128,8 @@ class GoogleGeocode extends GeoAdapter
       }
     }
     else {
-      if ($this->result->status) throw new Exception('Error in Google Reverse Geocoder: '.$this->result->status);
-      else throw new Exception('Unknown error in Google Reverse Geocoder');
+      if ($this->result->status) throw new \Exception('Error in Google Reverse Geocoder: '.$this->result->status);
+      else throw new \Exception('Unknown error in Google Reverse Geocoder');
       return FALSE;
     }
   }

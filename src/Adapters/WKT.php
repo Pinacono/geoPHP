@@ -1,9 +1,22 @@
 <?php
+
+namespace Pinacono\GeoPHP\Adapters;
+
+use Pinacono\GeoPHP\geoPHP;
+
+use Pinacono\GeoPHP\Geometries\Geometry;
+use Pinacono\GeoPHP\Geometries\GeometryCollection;
+use Pinacono\GeoPHP\Geometries\LineString;
+use Pinacono\GeoPHP\Geometries\MultiLineString;
+use Pinacono\GeoPHP\Geometries\MultiPoint;
+use Pinacono\GeoPHP\Geometries\MultiPolygon;
+use Pinacono\GeoPHP\Geometries\Point;
+use Pinacono\GeoPHP\Geometries\Polygon;
+
 /**
  * WKT (Well Known Text) Adapter
  */
-class WKT extends GeoAdapter
-{
+class WKT extends GeoAdapter {
 
   /**
    * Read WKT string into geometry objects
@@ -207,7 +220,7 @@ class WKT extends GeoAdapter
    *
    * @return string The WKT string representation of the input geometries
    */
-  public function write(Geometry $geometry) {
+  public function write(Geometry $geometry, bool $flag = false) {
     // If geos is installed, then we take a shortcut and let it write the WKT
     if (geoPHP::geosInstalled()) {
       $writer = new GEOSWKTWriter();

@@ -1,10 +1,14 @@
 <?php
 
+namespace Pinacono\GeoPHP\Geometries;
+
+use Pinacono\GeoPHP\geoPHP;
+use Polygon;
+
 /**
  * Geometry abstract class
  */
-abstract class Geometry
-{
+abstract class Geometry {
   private   $geos = NULL;
   protected $srid = NULL;
   protected $geom_type;

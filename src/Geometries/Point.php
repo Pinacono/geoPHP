@@ -1,11 +1,12 @@
 <?php
 
+namespace Pinacono\GeoPHP\Geometries;
+
 /**
  * Point: The most basic geometry type. All other geometries
  * are built out of Points.
  */
-class Point extends Geometry
-{
+class Point extends Geometry {
   public $coords = array(2);
   protected $geom_type = 'Point';
   protected $dimension = 2;
@@ -28,13 +29,13 @@ class Point extends Geometry
 
     // Basic validation on x and y
     if (!is_numeric($x) || !is_numeric($y)) {
-      throw new Exception("Cannot construct Point. x and y should be numeric");
+      throw new \Exception("Cannot construct Point. x and y should be numeric");
     }
 
     // Check to see if this is a 3D point
     if ($z !== NULL) {
       if (!is_numeric($z)) {
-       throw new Exception("Cannot construct Point. z should be numeric");
+       throw new \Exception("Cannot construct Point. z should be numeric");
       }
       $this->dimension = 3;
     }

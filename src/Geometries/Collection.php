@@ -1,5 +1,10 @@
 <?php
 
+namespace Pinacono\GeoPHP\Geometries;
+
+use Pinacono\GeoPHP\geoPHP;
+use LineString;
+
 /**
  * Collection: Abstract class for compound geometries
  *
@@ -8,8 +13,7 @@
  * is a Collection. For example a LingString is a collection
  * of Points. A Polygon is a collection of LineStrings etc.
  */
-abstract class Collection extends Geometry
-{
+abstract class Collection extends Geometry {
   public $components = array();
 
   /**
@@ -19,14 +23,14 @@ abstract class Collection extends Geometry
    */
   public function __construct($components = array()) {
     if (!is_array($components)) {
-      throw new Exception("Component geometries must be passed as an array");
+      throw new \Exception("Component geometries must be passed as an array");
     }
     foreach ($components as $component) {
       if ($component instanceof Geometry) {
         $this->components[] = $component;
       }
       else {
-        throw new Exception("Cannot create a collection with non-geometries");
+        throw new \Exception("Cannot create a collection with non-geometries");
       }
     }
   }

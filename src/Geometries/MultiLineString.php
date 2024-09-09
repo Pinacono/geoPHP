@@ -1,9 +1,13 @@
 <?php
+
+namespace Pinacono\GeoPHP\Geometries;
+
+use Collection;
+
 /**
  * MultiLineString: A collection of LineStrings
  */
-class MultiLineString extends Collection
-{
+class MultiLineString extends Collection {
   protected $geom_type = 'MultiLineString';
 
   // MultiLineString is closed if all it's components are closed

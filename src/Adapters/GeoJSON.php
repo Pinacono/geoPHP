@@ -1,4 +1,18 @@
 <?php
+
+namespace Pinacono\GeoPHP\Adapters;
+
+use Pinacono\GeoPHP\geoPHP;
+
+use Pinacono\GeoPHP\Geometries\Geometry;
+use Pinacono\GeoPHP\Geometries\GeometryCollection;
+use Pinacono\GeoPHP\Geometries\LineString;
+use Pinacono\GeoPHP\Geometries\MultiLineString;
+use Pinacono\GeoPHP\Geometries\MultiPoint;
+use Pinacono\GeoPHP\Geometries\MultiPolygon;
+use Pinacono\GeoPHP\Geometries\Point;
+use Pinacono\GeoPHP\Geometries\Polygon;
+
 /**
  * GeoJSON class : a geojson reader/writer.
  *
@@ -6,8 +20,7 @@
  * means that if you pass it a feature, it will return the
  * geometry of that feature strip everything else.
  */
-class GeoJSON extends GeoAdapter
-{
+class GeoJSON extends GeoAdapter {
   /**
    * Given an object or a string, return a Geometry
    *
@@ -20,10 +33,10 @@ class GeoJSON extends GeoAdapter
       $input = json_decode($input);
     }
     if (!is_object($input)) {
-      throw new Exception('Invalid JSON');
+      throw new \Exception('Invalid JSON');
     }
     if (!is_string($input->type)) {
-      throw new Exception('Invalid JSON');
+      throw new \Exception('Invalid JSON');
     }
 
     // Check to see if it's a FeatureCollection
@@ -106,7 +119,7 @@ class GeoJSON extends GeoAdapter
   private function objToGeometryCollection($obj) {
     $geoms = array();
     if (empty($obj->geometries)) {
-      throw new Exception('Invalid GeoJSON: GeometryCollection with no component geometries');
+      throw new \Exception('Invalid GeoJSON: GeometryCollection with no component geometries');
     }
     foreach ($obj->geometries as $comp_object) {
       $geoms[] = $this->objToGeom($comp_object);
@@ -122,7 +135,7 @@ class GeoJSON extends GeoAdapter
    *
    * @return string The GeoJSON string
    */
-  public function write(Geometry $geometry, $return_array = FALSE) {
+  public function write(Geometry $geometry, bool $return_array = FALSE) {
     if ($return_array) {
       return $this->getArray($geometry);
     }
