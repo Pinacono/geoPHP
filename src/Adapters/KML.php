@@ -238,7 +238,7 @@ class KML extends GeoAdapter {
     return $out;
   }
 
-  private function linestringToKML($geom, $type = FALSE) {
+  private function linestringToKML(GeometryCollection $geom, $type = FALSE) {
     if (!$type) {
       $type = $geom->getGeomType();
     }

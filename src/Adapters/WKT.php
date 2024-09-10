@@ -41,7 +41,7 @@ class WKT extends GeoAdapter {
 
     // If geos is installed, then we take a shortcut and let it parse the WKT
     if (geoPHP::geosInstalled()) {
-      $reader = new GEOSWKTReader();
+      $reader = new \GEOSWKTReader();
       if ($srid) {
         $geom = geoPHP::geosToGeometry($reader->read($wkt));
         $geom->setSRID($srid);
@@ -223,7 +223,7 @@ class WKT extends GeoAdapter {
   public function write(Geometry $geometry, bool $flag = false) {
     // If geos is installed, then we take a shortcut and let it write the WKT
     if (geoPHP::geosInstalled()) {
-      $writer = new GEOSWKTWriter();
+      $writer = new \GEOSWKTWriter();
       $writer->setTrim(TRUE);
       return $writer->write($geometry->geos());
     }
@@ -243,25 +243,38 @@ class WKT extends GeoAdapter {
    *
    * @return string
    */
-  public function extractData($geometry) {
+  public function extractData(Geometry|GeometryCollection $geometry) {
     $parts = array();
     switch ($geometry->geometryType()) {
+
       case 'Point':
         return $geometry->getX().' '.$geometry->getY();
+
       case 'LineString':
-        foreach ($geometry->getComponents() as $component) {
+        if ( ! is_a($geometry, LineString::class) ) {
+          throw new \Exception('Expecting GeometryCollection');
+        }
+        foreach ( $geometry->getComponents() as $component ) {
           $parts[] = $this->extractData($component);
         }
         return implode(', ', $parts);
+
       case 'Polygon':
       case 'MultiPoint':
       case 'MultiLineString':
       case 'MultiPolygon':
-        foreach ($geometry->getComponents() as $component) {
+        if ( ! is_a($geometry, GeometryCollection::class) ) {
+          throw new \Exception('Expecting GeometryCollection');
+        }
+        foreach ( $geometry->getComponents() as $component ) {
           $parts[] = '('.$this->extractData($component).')';
         }
         return implode(', ', $parts);
+
       case 'GeometryCollection':
+        if ( ! is_a($geometry, GeometryCollection::class) ) {
+          throw new \Exception('Expecting GeometryCollection');
+        }
         foreach ($geometry->getComponents() as $component) {
           $parts[] = strtoupper($component->geometryType()).' ('.$this->extractData($component).')';
         }

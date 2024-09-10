@@ -14,32 +14,6 @@ use Pinacono\GeoPHP\Geometries\GeometryCollection;
  * file that was distributed with this source code.
  */
 
-/*
-// Adapters
-include_once("lib/adapters/GeoAdapter.class.php"); // Abtract class
-include_once("lib/adapters/GeoJSON.class.php");
-include_once("lib/adapters/WKT.class.php");
-include_once("lib/adapters/EWKT.class.php");
-include_once("lib/adapters/WKB.class.php");
-include_once("lib/adapters/EWKB.class.php");
-include_once("lib/adapters/KML.class.php");
-include_once("lib/adapters/GPX.class.php");
-include_once("lib/adapters/GeoRSS.class.php");
-include_once("lib/adapters/GoogleGeocode.class.php");
-include_once("lib/adapters/GeoHash.class.php");
-
-// Geometries
-include_once("lib/geometry/Geometry.class.php"); // Abtract class
-include_once("lib/geometry/Point.class.php");
-include_once("lib/geometry/Collection.class.php"); // Abtract class
-include_once("lib/geometry/LineString.class.php");
-include_once("lib/geometry/MultiPoint.class.php");
-include_once("lib/geometry/Polygon.class.php");
-include_once("lib/geometry/MultiLineString.class.php");
-include_once("lib/geometry/MultiPolygon.class.php");
-include_once("lib/geometry/GeometryCollection.class.php");
-*/
-
 class geoPHP {
 
   static function version() {
@@ -75,10 +49,11 @@ class geoPHP {
 
     $processor_type = $type_map[$type];
 
-    if (!$processor_type) {
+    if ( ! $processor_type ) {
       throw new \exception('geoPHP could not find an adapter of type '.htmlentities($type));
     }
 
+    $processor_type = '\\Pinacono\\GeoPHP\\Adapters\\'. $processor_type;
     $processor = new $processor_type();
 
     // Data is not an array, just pass it normally
@@ -98,29 +73,31 @@ class geoPHP {
   }
 
   static function getAdapterMap() {
+    //$namespace = 'Pinacon\\GeoPHP\\Adapters\\';
     return array (
-      'wkt' =>  'WKT',
-      'ewkt' => 'EWKT',
-      'wkb' =>  'WKB',
-      'ewkb' => 'EWKB',
-      'json' => 'GeoJSON',
+      'wkt'     => 'WKT',
+      'ewkt'    => 'EWKT',
+      'wkb'     => 'WKB',
+      'ewkb'    => 'EWKB',
+      'json'    => 'GeoJSON',
       'geojson' => 'GeoJSON',
-      'kml' =>  'KML',
-      'gpx' =>  'GPX',
-      'georss' => 'GeoRSS',
+      'kml'     => 'KML',
+      'gpx'     => 'GPX',
+      'georss'  => 'GeoRSS',
       'google_geocode' => 'GoogleGeocode',
       'geohash' => 'GeoHash',
     );
   }
 
   static function geometryList() {
+    //$namespace = 'Pinacon\\GeoPHP\\Geometries\\';
     return array(
-      'point' => 'Point',
-      'linestring' => 'LineString',
-      'polygon' => 'Polygon',
-      'multipoint' => 'MultiPoint',
+      'point'           => 'Point',
+      'linestring'      => 'LineString',
+      'polygon'         => 'Polygon',
+      'multipoint'      => 'MultiPoint',
       'multilinestring' => 'MultiLineString',
-      'multipolygon' => 'MultiPolygon',
+      'multipolygon'    => 'MultiPolygon',
       'geometrycollection' => 'GeometryCollection',
     );
   }
@@ -140,8 +117,8 @@ class geoPHP {
       return NULL;
     }
 
-    throw new \Exception('geosToGeometry is not implemented yet');
-    /*
+    //throw new \Exception('geosToGeometry is not implemented yet');
+
     $wkb_writer = new \GEOSWKBWriter();
     $wkb = $wkb_writer->writeHEX($geos);
     $geometry = geoPHP::load($wkb, 'wkb', TRUE);
@@ -149,14 +126,13 @@ class geoPHP {
       $geometry->setGeos($geos);
       return $geometry;
     }
-    */
   }
 
   // Reduce a geometry, or an array of geometries, into their 'lowest' available common geometry.
   // For example a GeometryCollection of only points will become a MultiPoint
   // A multi-point containing a single point will return a point.
   // An array of geometries can be passed and they will be compiled into a single geometry
-  static function geometryReduce($geometry) {
+  static function geometryReduce(array|GeometryCollection $geometry) {
     // If it's an array of one, then just parse the one
     if (is_array($geometry)) {
       if (empty($geometry)) return FALSE;
@@ -164,7 +140,7 @@ class geoPHP {
     }
 
     // If the geometry cannot even theoretically be reduced more, then pass it back
-    if (gettype($geometry) == 'object') {
+    if ( gettype($geometry) == 'object' ) {
       $passbacks = array('Point','LineString','Polygon');
       if (in_array($geometry->geometryType(),$passbacks)) {
         return $geometry;

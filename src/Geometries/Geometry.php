@@ -93,7 +93,12 @@ abstract class Geometry {
 
     $format = array_shift($args);
     $type_map = geoPHP::getAdapterMap();
-    $processor_type = $type_map[$format];
+
+    if ( ! $type_map[$format] ) {
+      throw new \exception('geoPHP could not find an adapter of type '.htmlentities($format));
+    }
+
+    $processor_type = '\\Pinacono\\GeoPHP\\Adapters\\'. $type_map[$format];
     $processor = new $processor_type();
 
     array_unshift($args, $this);
@@ -148,9 +153,12 @@ abstract class Geometry {
     if ($this->geos && geoPHP::geosInstalled()) {
       return $this->geos;
     }
+
+    //throw new \Exception('GEOS support is not implemented yet');
+
     // It hasn't been set yet, generate it
     if (geoPHP::geosInstalled()) {
-      $reader = new GEOSWKBReader();
+      $reader = new \GEOSWKBReader();
       $this->geos = $reader->readHEX($this->out('wkb',TRUE));
     }
     else {

@@ -2,12 +2,10 @@
 
 namespace Pinacono\GeoPHP\Geometries;
 
-use Collection;
-
 /**
  * MultiPoint: A collection Points
  */
-class MultiPoint extends Collection {
+class MultiPoint extends GeometryCollection {
 
   protected $geom_type = 'MultiPoint';
 

@@ -170,7 +170,7 @@ class GPX extends GeoAdapter
     return '<'.$this->nss.'wpt lat="'.$geom->getY().'" lon="'.$geom->getX().'" />';
   }
 
-  private function linestringToGPX($geom) {
+  private function linestringToGPX(GeometryCollection $geom) {
     $gpx = '<'.$this->nss.'trk><'.$this->nss.'trkseg>';
 
     foreach ($geom->getComponents() as $comp) {
@@ -182,13 +182,11 @@ class GPX extends GeoAdapter
     return $gpx;
   }
 
-  public function collectionToGPX($geom) {
+  public function collectionToGPX(GeometryCollection $geom) {
     $gpx = '';
-    $components = $geom->getComponents();
-    foreach ($geom->getComponents() as $comp) {
+    foreach ( $geom->getComponents() as $comp) {
       $gpx .= $this->geometryToGPX($comp);
     }
-
     return $gpx;
   }
 

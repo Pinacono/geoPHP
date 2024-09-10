@@ -229,7 +229,7 @@ class GeoRSS extends GeoAdapter {
     return $out;
   }
 
-  private function linestringToGeoRSS($geom) {
+  private function linestringToGeoRSS(GeometryCollection $geom) {
     $output = '<'.$this->nss.'line>';
     foreach ($geom->getComponents() as $k => $point) {
       $output .= $point->getY().' '.$point->getX();
@@ -239,9 +239,12 @@ class GeoRSS extends GeoAdapter {
     return $output;
   }
 
-  private function polygonToGeoRSS($geom) {
+  private function polygonToGeoRSS(GeometryCollection $geom) {
     $output = '<'.$this->nss.'polygon>';
     $exterior_ring = $geom->exteriorRing();
+    if ( is_null($exterior_ring) ) {
+      return '<'.$this->nss.'polygon></'.$this->nss.'polygon>';
+    }
     foreach ($exterior_ring->getComponents() as $k => $point) {
       $output .= $point->getY().' '.$point->getX();
       if ($k < ($exterior_ring->numGeometries() -1)) $output .= ' ';
