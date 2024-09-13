@@ -6,7 +6,7 @@ namespace Pinacono\GeoPHP\Geometries;
  * LineString. A collection of Points representing a line.
  * A line can have more than one segment.
  */
-class LineString extends Collection {
+class LineString extends GeometryCollection {
 
   protected $geom_type = 'LineString';
 

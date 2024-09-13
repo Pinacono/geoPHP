@@ -2,7 +2,7 @@
 
 namespace Pinacono\GeoPHP\Geometries;
 
-use Collection;
+use Pinacono\GeoPHP\Geometries\Collection;
 
 /**
  * GeometryCollection: A heterogenous collection of geometries
